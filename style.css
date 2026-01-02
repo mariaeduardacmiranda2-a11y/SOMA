@@ -55,7 +55,6 @@ body, html {
 .user-text { color: #66ccff; margin: 5px 0; }
 .soma-text { color: #00ff99; margin: 5px 0; font-weight: bold; }
 
-/* Classe para o Modo de Treino */
 .modo-alerta {
     border-color: #ff1e1e !important;
     background: rgba(30, 0, 0, 0.9) !important;
