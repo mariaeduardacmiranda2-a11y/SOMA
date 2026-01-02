@@ -1,12 +1,11 @@
 // ================== S.O.M.A 7.4 - SISTEMA DE INTELIGÊNCIA E TREINO ==================
 
 let estadoRosto = "neutro"; 
-let corInterface = [0, 255, 153]; // Verde padrão
+let corInterface = [0, 255, 153]; 
 let anelOffset = 0;
 let scannerY = 0;
 let particulas = [];
 
-// SUA NOVA CHAVE DE API ATUALIZADA
 const GEMINI_API_KEY = "AIzaSyAqPRSM7hzCS4dhaChS_rhtKdXzeT1Sazo"; 
 
 function setup() {
@@ -21,7 +20,7 @@ function setup() {
     }
   });
 
-  boot();
+  addLog("soma", "S.O.M.A 7.4 ONLINE. Sistemas estáveis.");
 }
 
 function draw() {
@@ -36,7 +35,6 @@ async function interpretar(txt) {
   addLog("user", txt);
   let p = txt.toLowerCase().trim();
 
-  // COMANDOS DE TREINAMENTO
   if (p.includes("treinar") || p.includes("treinamento") || p.includes("exercício")) {
     iniciarTreino();
     return;
@@ -46,7 +44,6 @@ async function interpretar(txt) {
     return;
   }
 
-  // CONSULTA À IA
   estadoRosto = "pensando";
   addLog("soma", "Acessando base de dados central...");
   
@@ -56,7 +53,6 @@ async function interpretar(txt) {
   } catch (erro) {
     addLog("soma", "Erro: Uplink com satélite falhou.");
   }
-  
   estadoRosto = "neutro";
 }
 
@@ -68,42 +64,36 @@ async function consultarIA(pergunta) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       contents: [{
-        parts: [{ text: `Você é o S.O.M.A 7.4, um robô militar. Responda curto e direto: ${pergunta}` }]
+        parts: [{ text: `Você é o S.O.M.A 7.4, um robô militar. Responda de forma curta e direta: ${pergunta}` }]
       }]
     })
   });
 
   const data = await response.json();
-  
   if (data.candidates && data.candidates[0].content) {
-      return data.candidates[0].content.parts[0].text;
+    return data.candidates[0].content.parts[0].text;
   } else {
-      throw new Error("Falha na resposta");
+    throw new Error("Falha na resposta");
   }
 }
 
 function iniciarTreino() {
-  corInterface = [255, 30, 30]; // MUDA PARA VERMELHO
+  corInterface = [255, 30, 30];
   document.getElementById('terminal-container').classList.add('modo-alerta');
-  estadoRosto = "alerta";
-  
-  const exercicios = ["Flexões", "Abdominais", "Polichinelos"];
-  const exercicioSorteado = random(exercicios);
-  const quantidade = floor(random(10, 30)); 
-
-  responder(`ALERTA: MODO DE TREINO ATIVADO! Faça ${quantidade} ${exercicioSorteado}!`);
+  responder("ALERTA: MODO DE TREINO ATIVADO!");
 }
 
 function pararTreino() {
-  corInterface = [0, 255, 153]; // VOLTA PARA VERDE
+  corInterface = [0, 255, 153];
   document.getElementById('terminal-container').classList.remove('modo-alerta');
-  estadoRosto = "neutro";
   responder("Treinamento finalizado. Retornando ao modo estável.");
 }
 
 function responder(msg) {
   addLog("soma", msg);
-  falar(msg);
+  let utterance = new SpeechSynthesisUtterance(msg);
+  utterance.lang = 'pt-BR';
+  window.speechSynthesis.speak(utterance);
 }
 
 function addLog(tipo, msg) {
@@ -113,12 +103,6 @@ function addLog(tipo, msg) {
   p.innerHTML = `<strong>${tipo.toUpperCase()}:</strong> ${msg}`;
   logDiv.appendChild(p);
   logDiv.scrollTop = logDiv.scrollHeight;
-}
-
-function falar(txt) {
-  let utterance = new SpeechSynthesisUtterance(txt);
-  utterance.lang = 'pt-BR';
-  window.speechSynthesis.speak(utterance);
 }
 
 function drawTechBackground() {
@@ -132,8 +116,7 @@ function drawTechBackground() {
 function drawRostoFuturista(x, y, d, cor) {
   push();
   translate(x, y);
-  noFill();
-  stroke(cor[0], cor[1], cor[2], 150);
+  noFill(); stroke(cor[0], cor[1], cor[2], 150);
   ellipse(0, 0, d);
   rotate(anelOffset);
   arc(0, 0, d+20, d+20, 0, PI/2);
@@ -143,10 +126,6 @@ function drawRostoFuturista(x, y, d, cor) {
   ellipse(-40, 0, 30, blink);
   ellipse(40, 0, 30, blink);
   pop();
-}
-
-function boot() {
-  addLog("soma", "S.O.M.A 7.4 ONLINE. Aguardando comandos.");
 }
 
 function atualizarParticulas() {
