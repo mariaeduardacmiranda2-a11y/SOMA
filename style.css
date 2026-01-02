@@ -1,0 +1,12 @@
+body { margin: 0; background: #05080a; color: #00ff99; font-family: monospace; overflow: hidden; }
+#ui-container { position: fixed; top: 0; left: 0; z-index: -1; }
+#terminal-container {
+    position: absolute; bottom: 20px; left: 20px;
+    width: 400px; background: rgba(0, 20, 15, 0.9);
+    border: 1px solid #00ff99; padding: 15px; border-radius: 5px;
+}
+#log-display { height: 200px; overflow-y: auto; margin-bottom: 10px; }
+.input-area { display: flex; border-top: 1px solid #00ff99; padding-top: 10px; }
+#user-input { background: transparent; border: none; color: #00ff99; width: 100%; outline: none; }
+.user-text { color: #66ccff; }
+.soma-text { color: #00ff99; }
