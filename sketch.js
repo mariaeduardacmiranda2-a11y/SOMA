@@ -1,12 +1,11 @@
-// ================== S.O.M.A 7.4 - SISTEMA DE INTELIGÊNCIA E TREINO ==================
-
 let estadoRosto = "neutro"; 
 let corInterface = [0, 255, 153]; 
 let anelOffset = 0;
 let scannerY = 0;
 let particulas = [];
 
-const GEMINI_API_KEY = "AIzaSyAqPRSM7hzCS4dhaChS_rhtKdXzeT1Sazo"; 
+// CHAVE ATUALIZADA - NÃO TRADUZIR ESTA LINHA
+const GEMINI_API_KEY = "AIzaSyA_yisujmeuMqQowZLSRg81k_Ndjgdi5rI"; 
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
