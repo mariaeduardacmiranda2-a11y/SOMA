@@ -1,14 +1,10 @@
-// ================== S.O.M.A 7.4 - SISTEMA DE INTELIGÊNCIA E TREINO ==================
-
 let estadoRosto = "neutro"; 
-let modoTreino = false;
-let corInterface = [0, 255, 153]; // Verde padrão
+let corInterface = [0, 255, 153]; 
 let anelOffset = 0;
 let scannerY = 0;
 let particulas = [];
 
-// CHAVE DE API - Verificada na sua imagem do Google AI Studio
-const GEMINI_API_KEY = "AIzaSyA6uUujOhNJycaIoYMK93aOTUdXfkf-9f8"; 
+const GEMINI_API_KEY = "AIzaSyA6uUujOhNJycaIoYMK93aOTUdXfkf-9f8"; //
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
@@ -22,7 +18,7 @@ function setup() {
     }
   });
 
-  boot();
+  addLog("soma", "S.O.M.A 7.4 ONLINE. Sistemas estáveis.");
 }
 
 function draw() {
@@ -37,7 +33,7 @@ async function interpretar(txt) {
   addLog("user", txt);
   let p = txt.toLowerCase().trim();
 
-  // COMANDOS DE TREINAMENTO (Sua solicitação de tela vermelha)
+  // COMANDO DE TREINO
   if (p.includes("treinar") || p.includes("treinamento") || p.includes("exercício")) {
     iniciarTreino();
     return;
@@ -47,7 +43,6 @@ async function interpretar(txt) {
     return;
   }
 
-  // CONSULTA À IA (Ajustada para corrigir o erro de Uplink)
   estadoRosto = "pensando";
   addLog("soma", "Acessando base de dados central...");
   
@@ -57,21 +52,18 @@ async function interpretar(txt) {
   } catch (erro) {
     addLog("soma", "Erro: Uplink com satélite falhou.");
   }
-  
   estadoRosto = "neutro";
 }
 
 async function consultarIA(pergunta) {
-  // CORREÇÃO DA LINHA 109: Agora enviando a chave corretamente
+  // URL Corrigida com a chave no final
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
   const response = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      contents: [{
-        parts: [{ text: `Você é o S.O.M.A 7.4, um robô militar. Responda curto: ${pergunta}` }]
-      }]
+      contents: [{ parts: [{ text: `Você é o S.O.M.A 7.4, um robô militar. Responda curto: ${pergunta}` }] }]
     })
   });
 
@@ -80,27 +72,24 @@ async function consultarIA(pergunta) {
 }
 
 function iniciarTreino() {
-  modoTreino = true;
-  corInterface = [255, 30, 30]; // MUDA PARA VERMELHO
-  estadoRosto = "alerta";
-  
-  const exercicios = ["Flexões", "Abdominais", "Polichinelos"];
-  const exercicioSorteado = random(exercicios);
-  const quantidade = floor(random(10, 30)); 
-
-  responder(`ALERTA: MODO DE TREINO ATIVADO! Faça ${quantidade} ${exercicioSorteado}!`);
+  corInterface = [255, 30, 30]; // Muda para Vermelho
+  document.getElementById('terminal-container').classList.add('modo-alerta');
+  const ex = ["Flexões", "Abdominais"];
+  const qtd = floor(random(10, 30)); 
+  responder(`ALERTA: MODO DE TREINO ATIVADO! Faça ${qtd} ${random(ex)} imediatamente!`);
 }
 
 function pararTreino() {
-  modoTreino = false;
-  corInterface = [0, 255, 153]; // VOLTA PARA VERDE
-  estadoRosto = "neutro";
+  corInterface = [0, 255, 153]; // Volta para Verde
+  document.getElementById('terminal-container').classList.remove('modo-alerta');
   responder("Treinamento finalizado. Retornando ao modo estável.");
 }
 
 function responder(msg) {
   addLog("soma", msg);
-  falar(msg);
+  let utterance = new SpeechSynthesisUtterance(msg);
+  utterance.lang = 'pt-BR';
+  window.speechSynthesis.speak(utterance);
 }
 
 function addLog(tipo, msg) {
@@ -110,12 +99,6 @@ function addLog(tipo, msg) {
   p.innerHTML = `<strong>${tipo.toUpperCase()}:</strong> ${msg}`;
   logDiv.appendChild(p);
   logDiv.scrollTop = logDiv.scrollHeight;
-}
-
-function falar(txt) {
-  let utterance = new SpeechSynthesisUtterance(txt);
-  utterance.lang = 'pt-BR';
-  window.speechSynthesis.speak(utterance);
 }
 
 function drawTechBackground() {
@@ -129,8 +112,7 @@ function drawTechBackground() {
 function drawRostoFuturista(x, y, d, cor) {
   push();
   translate(x, y);
-  noFill();
-  stroke(cor[0], cor[1], cor[2], 150);
+  noFill(); stroke(cor[0], cor[1], cor[2], 150);
   ellipse(0, 0, d);
   rotate(anelOffset);
   arc(0, 0, d+20, d+20, 0, PI/2);
@@ -140,10 +122,6 @@ function drawRostoFuturista(x, y, d, cor) {
   ellipse(-40, 0, 30, blink);
   ellipse(40, 0, 30, blink);
   pop();
-}
-
-function boot() {
-  addLog("soma", "S.O.M.A 7.4 ONLINE. Aguardando comandos.");
 }
 
 function atualizarParticulas() {
